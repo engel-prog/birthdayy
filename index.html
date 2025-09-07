@@ -634,6 +634,72 @@
   to { transform: scale(1.5); opacity: 0; }
 }
 
+/* 🎁 Envelope Styling */
+
+/* Envelope container */
+.envelope {
+    width: 300px;
+    max-height: 400px;
+    margin: 2rem auto;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.5s ease;
+    border-radius: 15px;
+}
+
+/* Flap styling */
+.envelope .flap {
+    width: 100%;
+    height: 60px;
+    background: linear-gradient(135deg, #ff9ff3, #f368e0); /* gradient flap */
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: top;
+    transition: transform 0.6s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Letter inside */
+.envelope .letter {
+    width: 100%;
+    max-height: 0;
+    overflow-y: auto;
+    background: linear-gradient(180deg, #ff9ff3, #9b59b6); /* pink to purple gradient */
+    padding: 1.5rem;
+    border-radius: 0 0 15px 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transform: translateY(-100%);
+    opacity: 0;
+    transition: all 0.6s ease 0.3s;
+    color: #4B0082; /* text color */
+    font-family: 'Playfair Display', serif; /* elegant font */
+    font-size: 1rem;
+    line-height: 1.5;
+    text-align: center;
+}
+
+
+/* Open envelope animation */
+.envelope.open .flap {
+    transform: rotateX(-180deg);
+}
+
+.envelope.open .letter {
+    max-height: 200px; /* scrollable height */
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Shrink & move below control buttons */
+.envelope.shrink {
+    transform: scale(0.5) translateY(50px);
+    margin: 1rem auto;
+}
+
 
     </style>
 </head>
@@ -663,8 +729,15 @@
     
     <div class="birthday-container" id="birthdayContainer">
         <h1 class="birthday-title">✨ Happy Birthday, Shane! ✨</h1>
-        <p class="birthday-subtitle">Bless your heart, may it always be filled with kindness, strength, and the light to guide  you towards your dreams. </p>
-        
+        <!-- 💌 Envelope with hidden letter -->
+<div class="envelope" id="envelope" onclick="openEnvelope()">
+    <div class="flap"></div>
+    <div class="letter">
+        <p class="birthday-subtitle">
+           Bless your heart, may it always be filled with kindness, strength, and the light to guide you toward your dreams. May every step you take bring joy, every challenge make you stronger, and every moment remind you of how truly loved and cherished you are.</p>
+    </div>
+</div>
+
         <div class="cake-container">
             <div class="cake">
                 <div class="candles">
@@ -824,6 +897,13 @@ function createFireworks() {
     });
 
     // Sparkles effect
+  function openEnvelope() {
+    const envelope = document.getElementById('envelope');
+    envelope.classList.toggle('open'); // toggle open/close
+}
+
+
+
 function createSparkles() {
     for (let i = 0; i < 30; i++) {
         const sparkle = document.createElement('div');

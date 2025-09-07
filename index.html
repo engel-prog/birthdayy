@@ -621,7 +621,11 @@
     <div class="stars"></div>
     
     <div class="confetti-container" id="confettiContainer"></div>
-    
+    <!-- Background Music -->
+  <audio id="birthdayMusic" loop>
+    <source src="happy-birthday-368842.mp3" type="audio/mpeg">
+  
+  </audio>
     <div class="gift-box-container" id="giftBoxContainer">
         <div class="gift-box" onclick="openGift()">
             <div class="gift-ribbon-horizontal"></div>
@@ -665,163 +669,133 @@
         <div class="wish-message" id="wishMessage"></div>
     </div>
     
-    <script>
-        let confettiActive = false;
-        let musicPlaying = false;
-        let audioContext;
-        let oscillator;
-        let gainNode;
-        
-        // Create stars
-        function createStars() {
-            const starsContainer = document.querySelector('.stars');
-            for (let i = 0; i < 100; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.animationDelay = Math.random() * 3 + 's';
-                starsContainer.appendChild(star);
-            }
+   <script>
+    let confettiActive = false;
+
+    // Create stars
+    function createStars() {
+        const starsContainer = document.querySelector('.stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
         }
-        
-        // Create confetti system
-        function createConfetti() {
-            const container = document.getElementById('confettiContainer');
-            const colors = ['#bb86fc', '#e8d5ff', '#d1c4e9', '#f3e5f5', '#8e44ad', '#9b59b6', '#c39bd3', '#FFD700', '#FF69B4', '#00CED1'];
-            
-            for (let i = 0; i < 50; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.left = Math.random() * 100 + '%';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.animationDelay = Math.random() * 8 + 's';
-                confetti.style.animationDuration = (Math.random() * 4 + 6) + 's';
-                container.appendChild(confetti);
-            }
+    }
+
+    // Create confetti system
+    function createConfetti() {
+        const container = document.getElementById('confettiContainer');
+        const colors = ['#bb86fc', '#e8d5ff', '#d1c4e9', '#f3e5f5', '#8e44ad', '#9b59b6', '#c39bd3', '#FFD700', '#FF69B4', '#00CED1'];
+
+        for (let i = 0; i < 50; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDelay = Math.random() * 8 + 's';
+            confetti.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            container.appendChild(confetti);
         }
-        
-        // Start celebration with floating confetti
-        function startCelebration() {
-            confettiActive = !confettiActive;
-            const confettiElements = document.querySelectorAll('.confetti');
-            
-            confettiElements.forEach(confetti => {
-                if (confettiActive) {
-                    confetti.classList.add('active');
-                } else {
-                    confetti.classList.remove('active');
-                }
-            });
-            
-            // Update button text
-            const btn = event.target;
-            btn.textContent = confettiActive ? '🛑 Stop Celebration' : '🎉 Start Celebration';
-            
+    }
+
+    // Start celebration with floating confetti
+    function startCelebration(event) {
+        confettiActive = !confettiActive;
+        const confettiElements = document.querySelectorAll('.confetti');
+
+        confettiElements.forEach(confetti => {
             if (confettiActive) {
-                createMusicNotes();
+                confetti.classList.add('active');
+            } else {
+                confetti.classList.remove('active');
             }
-        }
-        
-       
-        
-        // Make a wish function
-        function makeWish() {
-            const messages = [
-                "✨ May all your dreams sparkle into reality",
-                "🌟 Wishing you endless joy and magical moments",
-                "💫 May this year bring you infinite happiness",
-                "🎀 Hope your birthday is as beautiful as you are",
-                "🌸 Sending you love, light, and birthday magic",
-                "💜 May your heart be filled with wonder today",
-                "🦋 Wishing you a year of beautiful adventures"
-            ];
-            
-            const wishMessage = document.getElementById('wishMessage');
-            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-            
-            wishMessage.textContent = randomMessage;
-            wishMessage.classList.add('show');
-            
-            // Create sparkle effect
-            createSparkles();
-            
-            // Auto-hide message after 5 seconds
+        });
+
+        // Update button text
+        const btn = event.target;
+        btn.textContent = confettiActive ? '🛑 Stop Celebration' : '🎉 Start Celebration';
+    }
+
+    // Make a wish
+    function makeWish() {
+        const messages = [
+            "✨ May all your dreams sparkle into reality",
+            "🌟 Wishing you endless joy and magical moments",
+            "💫 May this year bring you infinite happiness",
+            "🎀 Hope your birthday is as beautiful as you are",
+            "🌸 Sending you love, light, and birthday magic",
+            "💜 May your heart be filled with wonder today",
+            "🦋 Wishing you a year of beautiful adventures"
+        ];
+
+        const wishMessage = document.getElementById('wishMessage');
+        const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+
+        wishMessage.textContent = randomMessage;
+        wishMessage.classList.add('show');
+
+        createSparkles();
+
+        setTimeout(() => {
+            wishMessage.classList.remove('show');
+        }, 5000);
+    }
+
+    // Create sparkle effect
+    function createSparkles() {
+        for (let i = 0; i < 30; i++) {
+            const sparkle = document.createElement('div');
+            sparkle.style.position = 'absolute';
+            sparkle.style.width = '6px';
+            sparkle.style.height = '6px';
+            sparkle.style.background = '#FFD700';
+            sparkle.style.borderRadius = '50%';
+            sparkle.style.pointerEvents = 'none';
+            sparkle.style.left = Math.random() * window.innerWidth + 'px';
+            sparkle.style.top = Math.random() * window.innerHeight + 'px';
+            sparkle.style.zIndex = '1000';
+            sparkle.style.animation = 'sparkle 2s ease-out forwards';
+
+            document.body.appendChild(sparkle);
+
             setTimeout(() => {
-                wishMessage.classList.remove('show');
-            }, 5000);
+                sparkle.remove();
+            }, 2000);
         }
-        
-        // Create sparkle effect
-        function createSparkles() {
-            for (let i = 0; i < 30; i++) {
-                const sparkle = document.createElement('div');
-                sparkle.style.position = 'absolute';
-                sparkle.style.width = '6px';
-                sparkle.style.height = '6px';
-                sparkle.style.background = '#FFD700';
-                sparkle.style.borderRadius = '50%';
-                sparkle.style.pointerEvents = 'none';
-                sparkle.style.left = Math.random() * window.innerWidth + 'px';
-                sparkle.style.top = Math.random() * window.innerHeight + 'px';
-                sparkle.style.zIndex = '1000';
-                sparkle.style.animation = 'sparkle 2s ease-out forwards';
-                
-                document.body.appendChild(sparkle);
-                
-                setTimeout(() => {
-                    sparkle.remove();
-                }, 2000);
-            }
-        }
-        
-       
-        
-        // Add sparkle animation to stylesheet
-        const sparkleStyle = document.createElement('style');
-        sparkleStyle.textContent = `
-            @keyframes sparkle {
-                0% {
-                    transform: scale(0) rotate(0deg);
-                    opacity: 1;
-                }
-                50% {
-                    transform: scale(1.5) rotate(180deg);
-                    opacity: 1;
-                }
-                100% {
-                    transform: scale(0) rotate(360deg);
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(sparkleStyle);
-        
-        // Open gift box function
-        function openGift() {
-            const giftContainer = document.getElementById('giftBoxContainer');
-            const birthdayContainer = document.getElementById('birthdayContainer');
-            
-            // Hide gift box with animation
-            giftContainer.style.opacity = '0';
-            giftContainer.style.transform = 'scale(0.8)';
-            
-            // Show birthday celebration after animation
-            setTimeout(() => {
-                giftContainer.style.display = 'none';
-                birthdayContainer.classList.add('show');
-            }, 500);
-            
+    }
+
+    // Open gift box
+    function openGift() {
+        const giftContainer = document.getElementById('giftBoxContainer');
+        const birthdayContainer = document.getElementById('birthdayContainer');
+        const music = document.getElementById('birthdayMusic');
+
+        // Hide gift with animation
+        giftContainer.style.opacity = '0';
+        giftContainer.style.transform = 'scale(0.8)';
+
+        setTimeout(() => {
+            giftContainer.style.display = 'none';
+            birthdayContainer.classList.add('show');
+
+            // Play music (works after user click/tap)
+            music.play().catch(e => console.log("Music blocked:", e));
+
             // Create opening sparkles
             createSparkles();
-        }
-        
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            createStars();
-            createConfetti();
-        });
-           </script>
+        }, 500);
+    }
+
+    // Init stars + confetti
+    document.addEventListener('DOMContentLoaded', function () {
+        createStars();
+        createConfetti();
+    });
+</script>
+
 </body>
 </html>
 

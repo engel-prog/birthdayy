@@ -615,6 +615,26 @@
             .cake-middle { width: 160px; height: 50px; }
             .cake-top { width: 120px; height: 40px; }
         }
+
+        /* 🎆 Fireworks */
+.fireworks {
+  position: absolute;
+  pointer-events: none;
+}
+.firework-particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  animation: explode 1.5s ease-out forwards;
+}
+
+@keyframes sparkle {
+  from { transform: scale(0); opacity: 1; }
+  to { transform: scale(1.5); opacity: 0; }
+}
+
+
     </style>
 </head>
 <body>
@@ -671,6 +691,37 @@
     
    <script>
     let confettiActive = false;
+// 🎆 Fireworks Effect
+function createFireworks() {
+    const colors = ['#ff0', '#ff6347', '#7fff00', '#00ffff', '#ff69b4', '#ffa500', '#ffffff'];
+
+    for (let i = 0; i < 5; i++) {  // 5 bursts
+        const fireworks = document.createElement('div');
+        fireworks.className = 'fireworks';
+        fireworks.style.left = Math.random() * window.innerWidth + 'px';
+        fireworks.style.top = Math.random() * (window.innerHeight / 2) + 'px';
+
+        for (let j = 0; j < 20; j++) { // particles per burst
+            const particle = document.createElement('div');
+            particle.className = 'firework-particle';
+            particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+            const angle = (Math.PI * 2 * j) / 20;
+            const radius = Math.random() * 80 + 50;
+
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+
+            particle.style.setProperty('--x', `${x}px`);
+            particle.style.setProperty('--y', `${y}px`);
+            fireworks.appendChild(particle);
+        }
+
+        document.body.appendChild(fireworks);
+
+        setTimeout(() => fireworks.remove(), 2000); // remove after animation
+    }
+}
 
     // Create stars
     function createStars() {
@@ -719,53 +770,30 @@
         btn.textContent = confettiActive ? '🛑 Stop Celebration' : '🎉 Start Celebration';
     }
 
-    // Make a wish
-    function makeWish() {
-        const messages = [
-            "✨ May all your dreams sparkle into reality",
-            "🌟 Wishing you endless joy and magical moments",
-            "💫 May this year bring you infinite happiness",
-            "🎀 Hope your birthday is as beautiful as you are",
-            "🌸 Sending you love, light, and birthday magic",
-            "💜 May your heart be filled with wonder today",
-            "🦋 Wishing you a year of beautiful adventures"
-        ];
+   function makeWish() {
+    const messages = [
+        "✨ May all your dreams sparkle into reality",
+        "🌟 Wishing you endless joy and magical moments",
+        "💫 May this year bring you infinite happiness",
+        "🎀 Hope your birthday is as beautiful as you are",
+        "🌸 Sending you love, light, and birthday magic",
+        "💜 May your heart be filled with wonder today",
+        "🦋 Wishing you a year of beautiful adventures"
+    ];
 
-        const wishMessage = document.getElementById('wishMessage');
-        const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+    const wishMessage = document.getElementById('wishMessage');
+    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
 
-        wishMessage.textContent = randomMessage;
-        wishMessage.classList.add('show');
+    wishMessage.textContent = randomMessage;
+    wishMessage.classList.add('show');
 
-        createSparkles();
+    createSparkles();
+    createFireworks(); // 🎆 trigger fireworks!
 
-        setTimeout(() => {
-            wishMessage.classList.remove('show');
-        }, 5000);
-    }
-
-    // Create sparkle effect
-    function createSparkles() {
-        for (let i = 0; i < 30; i++) {
-            const sparkle = document.createElement('div');
-            sparkle.style.position = 'absolute';
-            sparkle.style.width = '6px';
-            sparkle.style.height = '6px';
-            sparkle.style.background = '#FFD700';
-            sparkle.style.borderRadius = '50%';
-            sparkle.style.pointerEvents = 'none';
-            sparkle.style.left = Math.random() * window.innerWidth + 'px';
-            sparkle.style.top = Math.random() * window.innerHeight + 'px';
-            sparkle.style.zIndex = '1000';
-            sparkle.style.animation = 'sparkle 2s ease-out forwards';
-
-            document.body.appendChild(sparkle);
-
-            setTimeout(() => {
-                sparkle.remove();
-            }, 2000);
-        }
-    }
+    setTimeout(() => {
+        wishMessage.classList.remove('show');
+    }, 5000);
+}
 
     // Open gift box
     function openGift() {
@@ -794,6 +822,30 @@
         createStars();
         createConfetti();
     });
+
+    // Sparkles effect
+function createSparkles() {
+    for (let i = 0; i < 30; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.style.position = 'absolute';
+        sparkle.style.width = '6px';
+        sparkle.style.height = '6px';
+        sparkle.style.background = '#FFD700';
+        sparkle.style.borderRadius = '50%';
+        sparkle.style.pointerEvents = 'none';
+        sparkle.style.left = Math.random() * window.innerWidth + 'px';
+        sparkle.style.top = Math.random() * window.innerHeight + 'px';
+        sparkle.style.zIndex = '1000';
+        sparkle.style.animation = 'sparkle 2s ease-out forwards';
+
+        document.body.appendChild(sparkle);
+
+        setTimeout(() => {
+            sparkle.remove();
+        }, 2000);
+    }
+}
+
 </script>
 
 </body>
